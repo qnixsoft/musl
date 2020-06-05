@@ -194,35 +194,35 @@ obj/%-clang: $(srcdir)/tools/%-clang.in config.mak
 	sed -e 's!@CC@!$(WRAPCC_CLANG)!g' -e 's!@PREFIX@!$(prefix)!g' -e 's!@INCDIR@!$(includedir)!g' -e 's!@LIBDIR@!$(libdir)!g' -e 's!@LDSO@!$(LDSO_PATHNAME)!g' $< > $@
 	chmod +x $@
 
-$(DESTDIR)$(bindir)/%: obj/%
+$(INSTALL_BINDIR)/%: obj/%
 	$(INSTALL) -D $< $@
 
-$(DESTDIR)$(libdir)/%.so: lib/%.so
+$(INSTALL_LIBDIR)/%.so: lib/%.so
 	$(INSTALL) -D -m 755 $< $@
 
-$(DESTDIR)$(libdir)/%: lib/%
+$(INSTALL_LIBDIR)/%: lib/%
 	$(INSTALL) -D -m 644 $< $@
 
-$(DESTDIR)$(includedir)/bits/%: $(srcdir)/arch/$(ARCH)/bits/%
+$(INSTALL_INCDIR)/bits/%: $(srcdir)/arch/$(ARCH)/bits/%
 	$(INSTALL) -D -m 644 $< $@
 
-$(DESTDIR)$(includedir)/bits/%: $(srcdir)/arch/generic/bits/%
+$(INSTALL_INCDIR)/bits/%: $(srcdir)/arch/generic/bits/%
 	$(INSTALL) -D -m 644 $< $@
 
-$(DESTDIR)$(includedir)/bits/%: obj/include/bits/%
+$(INSTALL_INCDIR)/bits/%: obj/include/bits/%
 	$(INSTALL) -D -m 644 $< $@
 
-$(DESTDIR)$(includedir)/%: $(srcdir)/include/%
+$(INSTALL_INCDIR)/%: $(srcdir)/include/%
 	$(INSTALL) -D -m 644 $< $@
 
-$(DESTDIR)$(LDSO_PATHNAME): $(DESTDIR)$(libdir)/libc.so
+$(METAL_PREFIX)$(LDSO_PATHNAME): $(DESTDIR)$(libdir)/libc.so
 	$(INSTALL) -D -l $(libdir)/libc.so $@ || true
 
-install-libs: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(if $(SHARED_LIBS),$(DESTDIR)$(LDSO_PATHNAME),)
+install-libs: $(ALL_LIBS:lib/%=$(INSTALL_LIBDIR)/%) $(if $(SHARED_LIBS),$(METAL_PREFIX)$(LDSO_PATHNAME),)
 
-install-headers: $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%)
+install-headers: $(ALL_INCLUDES:include/%=$(INSTALL_INCDIR)/%)
 
-install-tools: $(ALL_TOOLS:obj/%=$(DESTDIR)$(bindir)/%)
+install-tools: $(ALL_TOOLS:obj/%=$(INSTALL_BINDIR)/%)
 
 install: install-libs install-headers install-tools
 
