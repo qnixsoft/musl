@@ -35,7 +35,7 @@ AR      = $(CROSS_COMPILE)ar
 RANLIB  = $(CROSS_COMPILE)ranlib
 INSTALL = $(srcdir)/tools/install.sh
 
-include ${METAL_PATH}/mk/wasm.mk
+include ../mk/wasm.mk
 
 ifeq ($(ARCH),)
 
